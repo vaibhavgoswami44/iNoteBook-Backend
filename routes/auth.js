@@ -12,8 +12,7 @@ const featchuser = require('../middleware/featchuser');
 const path = require('path');
 const nodemailer = require('nodemailer');
 
-
-const jwt_secret = "VAIBHAViNoteBookAPP"
+const jwt_secret = process.env.JWT_SECRET
 
 
 
@@ -46,7 +45,7 @@ router.post('/createuser',
     ],
     async (req, res) => {
         try {
-
+            const { theme } = req.body
             //for Validations
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
@@ -68,6 +67,7 @@ router.post('/createuser',
             //create user in database
             user = await User.create({
                 name: req.body.name,
+                theme,
                 email: req.body.email,
                 password: hashPassword,
                 //Default Image
@@ -147,7 +147,7 @@ router.post('/getuser', featchuser, async (req, res) => {
         let profilePicture = `${req.protocol}://${req.get('host')}/${user.profilePicture}`;
 
         // remove fields that should not be sent to the client
-        const { _id, password, __v, date, theme, ...userData } = user.toObject();
+        const { _id, password, __v, date, ...userData } = user.toObject();
 
         const responseData = { ...userData, profilePicture };
         res.send(responseData);
@@ -275,16 +275,16 @@ router.post('/forgot-password',
 
         // create a Nodemailer transporter object
         const transporter = nodemailer.createTransport({
-           service:'Gmail',
-           auth:{
-            user:'inotebook456@gmail.com',
-            pass:'hyzgxlsubbqpdajx'
-           }
+            service: 'Gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD
+            }
         });
 
         // configure the email message
         const mailOptions = {
-            from: 'inotebook456@gmail.com',
+            from: process.env.EMAIL,
             to: user.email,
             subject: 'Password Reset OTP',
             text: `Your OTP is ${otp}.`
@@ -379,5 +379,18 @@ router.post('/reset-password',
     });
 
 
+//Route 11 : Update User theme path: '/api/auth/update-theme'  Login Require
+router.put('/update-theme', featchuser, async (req, res) => {
+    try {
+        const { theme } = req.body
+        const userId = req.user.id;
+        let user = await User.findById(userId).select("-password");
+        user = await User.findOneAndUpdate(userId, { $set: { theme } }, { returnOriginal: false })
+        res.json({ status: 'success', msg: "Theme Updated Successfully", theme: user.theme });
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+    }
+});
 
 module.exports = router;

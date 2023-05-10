@@ -4,7 +4,7 @@ const os = require('os');
 const chalk = require('chalk');
 const app = express()
 const port = 8080
-
+require('dotenv').config()
 
 //Creating LAN
 try {
@@ -43,5 +43,5 @@ app.get('/', (req, res) => {
 app.listen(port, [localIpv4, 'localhost'], () => {
     console.log('Server listening on\n')
     console.log(chalk.bold.white('\tLocal') + `:           http://localhost:` + chalk.bold.white(port))
-    console.log(chalk.bold.white('\tOn Your Network') + `: http://${localIpv4}:` + chalk.bold.white(port) + '\n\n')
+    localIpv4 ? console.log(chalk.bold.white('\tOn Your Network') + `: http://${localIpv4}:` + chalk.bold.white(port) + '\n\n') : ''
 })

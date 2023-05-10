@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const jwt_secret = "VAIBHAViNoteBookAPP"
+const jwt_secret = process.env.JWT_SECRET
 
 const featchuser = (req, res, next) => {
 
