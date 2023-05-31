@@ -5,7 +5,6 @@ const chalk = require('chalk');
 const app = express()
 const port = 8080 || process.env.PORT
 require('dotenv').config()
-
 //Creating LAN
 try {
     const networkInterfaces = os.networkInterfaces();
