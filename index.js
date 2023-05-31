@@ -5,7 +5,6 @@ const chalk = require('chalk');
 const app = express()
 const port = 8080 || process.env.PORT
 require('dotenv').config()
-const cors = require('cors')
 //Creating LAN
 try {
     const networkInterfaces = os.networkInterfaces();
@@ -23,9 +22,13 @@ connectToMongo()
 
 
 app.use(express.json())
-app.use(cors({
-origin:'https://inotebook-vaibhav.onrender.com/'
-}))
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://inotebook-vaibhav.onrender.com/')
+    res.header('Access-Control-Allow-Methods', '*')
+    res.header('Access-Control-Allow-Headers', '*')
+    next()
+})
+
 
 //Path 
 app.use(express.static('public'))
