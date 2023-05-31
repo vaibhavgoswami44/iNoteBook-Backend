@@ -44,7 +44,12 @@ router.post('/addnote', featchuser,
             const { title, tag, description } = req.body
             const user_id = req.user.id
             const note = new Notes({ title, tag, description, user: user_id })
-            const createnote = await note.save()
+            const newNote = await note.save()
+
+            const createnote = newNote.map(obj => {
+                const { __v, date, user, ...rest } = obj._doc;
+                return rest;
+            }); 
             res.json({ status: "success", msg: "Note Added", createnote })
 
         } catch (error) {
@@ -88,7 +93,8 @@ router.put('/updatenote/:id', featchuser,
 
             //Updating The Note
             note = await Notes.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
-            res.json({ status: "success", msg: "Note Updated", note })
+
+            res.json({ status: "success", msg: "Note Updated" })
 
         } catch (error) {
             console.error(error)
@@ -111,7 +117,7 @@ router.delete('/updatenote/:id', featchuser, async (req, res) => {
 
         //Deleting The Note
         note = await Notes.findByIdAndDelete(req.params.id)
-        res.json({ status: "success", msg: "Note Deleted", note })
+        res.json({ status: "success", msg: "Note Deleted" })
 
     } catch (error) {
         console.error(error)
