@@ -9,7 +9,13 @@ const { body, validationResult } = require('express-validator');
 router.get('/getallnotes', featchuser, async (req, res) => {
     try {
         const user_id = req.user.id
-        const notes = await Notes.find({ user: user_id })
+        const note = await Notes.find({ user: user_id })
+
+        const notes = note.map(obj => {
+            const { __v, date, user, ...rest } = obj._doc;
+            return rest;
+        });
+
         res.send(notes)
     } catch (error) {
         console.error(error)
@@ -115,3 +121,4 @@ router.delete('/updatenote/:id', featchuser, async (req, res) => {
 )
 
 module.exports = router
+
