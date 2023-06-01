@@ -150,7 +150,7 @@ router.post('/getuser', featchuser, async (req, res) => {
         const { _id, password, __v, date, ...userData } = user.toObject();
 
         const responseData = { ...userData, profilePicture };
-        res.send(responseData);
+        res.send({ ...responseData, status: 'success', msg: "User Details" });
     } catch (error) {
         console.error(error)
         return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
@@ -385,7 +385,7 @@ router.put('/update-theme', featchuser, async (req, res) => {
         const { theme } = req.body
         const userId = req.user.id;
         let user = await User.findById(userId).select("-password");
-        user = await User.findOneAndUpdate({_id:userId}, { $set: { theme } }, { returnOriginal: false })
+        user = await User.findOneAndUpdate({ _id: userId }, { $set: { theme } }, { returnOriginal: false })
         res.json({ status: 'success', msg: "Theme Updated Successfully", theme: user.theme });
     } catch (error) {
         console.error(error)
