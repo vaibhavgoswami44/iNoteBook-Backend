@@ -19,7 +19,7 @@ router.get('/getallnotes', featchuser, async (req, res) => {
         res.send(notes)
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: 'Internal Server Error' })
+        return res.status(500).json({ status: 'Failed', msg: 'Internal Server Error', error: error.message })
     }
 }
 )
@@ -49,12 +49,12 @@ router.post('/addnote', featchuser,
             const createnote = newNote.map(obj => {
                 const { __v, date, user, ...rest } = obj._doc;
                 return rest;
-            }); 
+            });
             res.json({ status: "success", msg: "Note Added", createnote })
 
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: 'Internal Server Error' })
+            return res.status(500).json({ status: 'Failed', msg: 'Internal Server Error', error: error.message })
         }
     }
 )
@@ -92,13 +92,13 @@ router.put('/updatenote/:id', featchuser,
             if (note.user.toString() !== req.user.id) { return res.status(401).json({ status: "Failed", msg: "Not Allowed" }) }
 
             //Updating The Note
-            note = await Notes.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
+            note = await Notes.findByIdAndUpdate({ _id: req.params.id }, { $set: newNote }, { new: true })
 
             res.json({ status: "success", msg: "Note Updated" })
 
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: 'Internal Server Error' })
+            return res.status(500).json({ status: 'Failed', msg: 'Internal Server Error', error: error.message })
         }
     }
 )
@@ -121,7 +121,7 @@ router.delete('/updatenote/:id', featchuser, async (req, res) => {
 
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: 'Internal Server Error' })
+        return res.status(500).json({ status: 'Failed', msg: 'Internal Server Error', error: error.message })
     }
 }
 )
