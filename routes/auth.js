@@ -131,7 +131,7 @@ router.post('/login',
 
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
         }
     })
 
@@ -153,7 +153,7 @@ router.post('/getuser', featchuser, async (req, res) => {
         res.send({ ...responseData, status: 'success', msg: "User Details" });
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
     }
 });
 
@@ -166,13 +166,13 @@ router.put('/updateUserDetails', featchuser, upload.single('profilePicture'), as
         const userId = req.user.id;
         let user = await User.findById(userId).select("-password");
 
-        user = await User.findOneAndUpdate(userId, { $set: { name, gender, birthDate, profilePicture: `/images/profile_pictures/${user._id}_ProfileImage.png` } }, { returnOriginal: false })
+        user = await User.findOneAndUpdate({ _id: userId }, { $set: { name, gender, birthDate, profilePicture: `/images/profile_pictures/${user._id}_ProfileImage.png` } }, { returnOriginal: false })
 
         let profilePicture = `${req.protocol}://${req.get('host')}/${user.profilePicture}`;
         res.json({ status: 'success', msg: "Profile Updated Successfully", profilePicture, name });
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
     }
 });
 
@@ -196,7 +196,7 @@ router.post('/authenticate', featchuser,
             return res.status(200).json({ status: 'success' })
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
         }
     })
 
@@ -216,7 +216,7 @@ router.put('/updateEmailorPassword', featchuser,
                     return res.status(400).json({ status: 'Failed', msg: ["Email already Exists"] })
                 }
                 else {
-                    user = await User.findOneAndUpdate(userId, { $set: { email } }, { returnOriginal: false })
+                    user = await User.findOneAndUpdate({ _id: userId }, { $set: { email } }, { returnOriginal: false })
                     return res.status(200).json({ status: 'success', msg: ['Email Updated Successfully'] })
                 }
             }
@@ -226,12 +226,12 @@ router.put('/updateEmailorPassword', featchuser,
                 const myPlaintextPassword = password
                 const salt = await bcrypt.genSalt(10)
                 const hashPassword = await bcrypt.hash(myPlaintextPassword, salt);
-                user = await User.findOneAndUpdate(userId, { $set: { password: hashPassword, lastPasswordChangedDate: Date.now() } }, { returnOriginal: false })
+                user = await User.findOneAndUpdate({ _id: userId }, { $set: { password: hashPassword, lastPasswordChangedDate: Date.now() } }, { returnOriginal: false })
                 return res.status(200).json({ status: 'success', msg: ['Password Updated Successfully'] })
             }
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
         }
     })
 
@@ -255,7 +255,7 @@ router.delete('/deleteUser', featchuser, async (req, res) => {
 
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
     }
 }
 )
@@ -308,7 +308,7 @@ router.post('/forgot-password',
             res.json({ status: "success", msg: ["OTP has been sent to your email"] });
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
         }
     });
 
@@ -343,7 +343,7 @@ router.post('/verify-otp',
             }
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
         }
     });
 
@@ -368,13 +368,13 @@ router.post('/reset-password',
                 const myPlaintextPassword = password
                 const salt = await bcrypt.genSalt(10)
                 const hashPassword = await bcrypt.hash(myPlaintextPassword, salt);
-                user = await User.findOneAndUpdate(user._id, { $set: { password: hashPassword, lastPasswordChangedDate: Date.now() } }, { returnOriginal: false })
+                user = await User.findOneAndUpdate({ _id: user._id }, { $set: { password: hashPassword, lastPasswordChangedDate: Date.now() } }, { returnOriginal: false })
                 return res.status(200).json({ status: 'success', msg: ['Password Updated Successfully'] })
             }
 
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
         }
     });
 
