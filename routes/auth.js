@@ -385,7 +385,7 @@ router.put('/update-theme', featchuser, async (req, res) => {
         const { theme } = req.body
         const userId = req.user.id;
         let user = await User.findById(userId).select("-password");
-        user = await User.findOneAndUpdate(userId, { $set: { theme } }, { returnOriginal: false })
+        user = await User.findOneAndUpdate({_id:userId}, { $set: { theme } }, { returnOriginal: false })
         res.json({ status: 'success', msg: "Theme Updated Successfully", theme: user.theme });
     } catch (error) {
         console.error(error)
