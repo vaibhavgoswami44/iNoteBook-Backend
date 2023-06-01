@@ -90,7 +90,7 @@ router.post('/createuser',
 
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error.message] })
         }
     },
 );
@@ -131,7 +131,7 @@ router.post('/login',
 
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
         }
     })
 
@@ -153,7 +153,7 @@ router.post('/getuser', featchuser, async (req, res) => {
         res.send({ ...responseData, status: 'success', msg: "User Details" });
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
     }
 });
 
@@ -172,7 +172,7 @@ router.put('/updateUserDetails', featchuser, upload.single('profilePicture'), as
         res.json({ status: 'success', msg: "Profile Updated Successfully", profilePicture, name });
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
     }
 });
 
@@ -196,7 +196,7 @@ router.post('/authenticate', featchuser,
             return res.status(200).json({ status: 'success' })
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
         }
     })
 
@@ -231,7 +231,7 @@ router.put('/updateEmailorPassword', featchuser,
             }
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
         }
     })
 
@@ -255,7 +255,7 @@ router.delete('/deleteUser', featchuser, async (req, res) => {
 
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
     }
 }
 )
@@ -308,7 +308,7 @@ router.post('/forgot-password',
             res.json({ status: "success", msg: ["OTP has been sent to your email"] });
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
         }
     });
 
@@ -343,7 +343,7 @@ router.post('/verify-otp',
             }
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
         }
     });
 
@@ -374,7 +374,7 @@ router.post('/reset-password',
 
         } catch (error) {
             console.error(error)
-            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+            return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error',error.message] })
         }
     });
 
