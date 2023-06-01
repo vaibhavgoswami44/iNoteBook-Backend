@@ -389,7 +389,7 @@ router.put('/update-theme', featchuser, async (req, res) => {
         res.json({ status: 'success', msg: "Theme Updated Successfully", theme: user.theme });
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error'] })
+        return res.status(500).json({ status: 'Failed', msg: ['Internal Server Error', error] })
     }
 });
 
