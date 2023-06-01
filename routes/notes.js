@@ -46,10 +46,11 @@ router.post('/addnote', featchuser,
             const note = new Notes({ title, tag, description, user: user_id })
             const newNote = await note.save()
 
-            const createnote = newNote.map(obj => {
-                const { __v, date, user, ...rest } = obj._doc;
-                return rest;
-            });
+
+            // remove fields that should not be sent to the client
+            const { __v, date, user, ...rest } = newNote.toObject();
+
+            const createnote = { ...rest };
             res.json({ status: "success", msg: "Note Added", createnote })
 
         } catch (error) {
