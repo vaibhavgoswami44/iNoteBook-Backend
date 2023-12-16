@@ -20,7 +20,7 @@ try {
 //connecting to db
 connectToMongo()
 
-
+app.disable('x-powered-by');
 app.use(express.json())
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
@@ -36,7 +36,7 @@ app.use("/api/auth", require('./routes/auth'))
 app.use("/api/notes", require('./routes/notes'))
 
 app.get('/', (req, res) => {
-    res.send("hello")
+    res.redirect('https://inotebook-vaibhav.netlify.app/');
 })
 
 app.listen(port, [localIpv4, 'localhost'], () => {
